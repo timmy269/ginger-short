@@ -1198,43 +1198,32 @@
       <p>27 tháng 5 - 23 tháng 6</p>
     </div>
 
-    <!-- Lưới hiển thị 2 cột -->
     <div class="dashboard-grid">
-      <div class="stat-card active">
-        <div class="stat-title">Lượt xem bài đăng</div>
-        <div class="stat-value" id="val-views">0</div>
-        <div class="stat-trend"><span class="trend-icon">↑</span> +7,6K</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Lượt xem hồ sơ</div>
-        <div class="stat-value" id="val-profile">0</div>
-        <div class="stat-trend"><span class="trend-icon">↑</span> +443</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Thích</div>
-        <div class="stat-value" id="val-likes">0</div>
-        <div class="stat-trend"><span class="trend-icon">↑</span> +395</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Bình luận</div>
-        <div class="stat-value" id="val-comments">0</div>
-        <div class="stat-trend"><span class="trend-icon">↑</span> +140</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Lượt chia sẻ</div>
-        <div class="stat-value" id="val-shares">0</div>
-        <div class="stat-trend"><span class="trend-icon">↑</span> +99</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Phần thưởng ước tính</div>
-        <div class="stat-value" id="val-rewards">$0.00</div>
-        <div class="stat-trend"><span class="trend-icon">↑</span> +$0.00 (+100%)</div>
-      </div>
+    <div class="stat-card active">
+      <div class="stat-title">Lượt xem trang</div>
+      <div class="stat-value" id="val-views">0</div>
+      <div class="stat-trend"><span class="trend-icon">↑</span> +1,2K</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-title">Lượt nhấn đặt hàng</div>
+      <div class="stat-value" id="val-orders">0</div>
+      <div class="stat-trend"><span class="trend-icon">↑</span> +45</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">Tương tác Blog</div>
+      <div class="stat-value" id="val-blog">0</div>
+      <div class="stat-trend"><span class="trend-icon">↑</span> +89</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">Lượt xem sản phẩm</div>
+      <div class="stat-value" id="val-products">0</div>
+      <div class="stat-trend"><span class="trend-icon">↑</span> +210</div>
+    </div>
+  </div>
 
-    <div class="chart-container">
-      <div style="padding: 0 24px;"><canvas id="myChart"></canvas></div>
-    </div>
+  <div class="chart-container">
+    <div style="padding: 0 24px;"><canvas id="myChart"></canvas></div>
+  </div>
   </main>
 
   <footer class="footer">
@@ -1331,67 +1320,46 @@
     let myChartInstance = null;
 
     function initDashboard() {
-      // 1. Reset số liệu trước khi chạy animation
+      // Reset số liệu
       document.getElementById("val-views").innerHTML = "0";
-      document.getElementById("val-profile").innerHTML = "0";
-      document.getElementById("val-likes").innerHTML = "0";
-      document.getElementById("val-comments").innerHTML = "0";
-      document.getElementById("val-shares").innerHTML = "0";
+      document.getElementById("val-orders").innerHTML = "0";
+      document.getElementById("val-blog").innerHTML = "0";
+      document.getElementById("val-products").innerHTML = "0";
       
-      // 2. Chạy animation giống các số trong hình
+      // Chạy hiệu ứng số liệu (tùy chỉnh con số theo thực tế web bạn mong muốn)
       animateDashboardValue("val-views", 0, 7600, 1500, true);  
-      animateDashboardValue("val-profile", 0, 443, 1500, false);
-      animateDashboardValue("val-likes", 0, 395, 1500, false);
-      animateDashboardValue("val-comments", 0, 140, 1500, false);
-      animateDashboardValue("val-shares", 0, 99, 1500, false);
+      animateDashboardValue("val-orders", 0, 443, 1500, false);
+      animateDashboardValue("val-blog", 0, 535, 1500, false);
+      animateDashboardValue("val-products", 0, 820, 1500, false);
 
       const ctx = document.getElementById('myChart').getContext('2d');
-      if (myChartInstance != null) {
-        myChartInstance.destroy();
-      }
+      if (myChartInstance != null) { myChartInstance.destroy(); }
 
-      // 3. Giả lập dữ liệu mảng có 1 đỉnh chóp (spike) để nét vẽ giống hình
-      const chartData = [150, 250, 400, 200, 350, 200, 150, 450, 200, 100, 350, 150, 300, 100, 1800, 400, 250, 350, 100];
-      const chartLabels = ["27 tháng 5", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "23 tháng 6"];
+      // Dữ liệu biểu đồ: Dãy số có 1 đỉnh cao ở giữa để giống thiết kế bạn thích
+      const chartData = [100, 150, 200, 180, 250, 220, 300, 280, 400, 350, 1800, 450, 300, 250, 350, 400, 300, 250, 200];
 
       myChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: chartLabels,
+          labels: ["27/05", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "23/06"],
           datasets: [{
-            label: 'Lượt xem',
+            label: 'Lượt truy cập',
             data: chartData,
-            borderColor: '#0284c7', // Màu viền xanh dương
-            backgroundColor: 'rgba(2, 132, 199, 0.1)', // Màu nền xanh nhạt
+            borderColor: '#F97316', // Màu cam chủ đạo của thương hiệu bạn
+            backgroundColor: 'rgba(249, 115, 22, 0.1)',
             fill: true,
-            tension: 0.1, // Cạnh sắc giống biểu đồ Facebook
-            pointRadius: 0, // Ẩn các chấm tròn
-            pointHoverRadius: 4
+            tension: 0.1,
+            pointRadius: 0
           }]
         },
         options: {
           responsive: true,
-          plugins: {
-            legend: { display: false } // Ẩn chú thích
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: {
-              grid: { display: false }, // Ẩn đường kẻ sọc dọc
-              ticks: { maxRotation: 0, autoSkip: false, color: '#94A3B8' }
-            },
+            x: { grid: { display: false }, ticks: { color: '#94A3B8' } },
             y: {
-              grid: { borderDash: [4, 4], color: '#E2E8F0' }, // Nét đứt ngang
-              max: 2000,
-              ticks: {
-                stepSize: 682,
-                callback: function(value) {
-                  if(value === 2000) return '2K';
-                  if(value > 1000) return (value/1000).toFixed(1).replace('.', ',') + 'K';
-                  if(value === 682) return '682'; // Hiển thị số lẻ theo chuẩn y-axis của bạn
-                  return value;
-                },
-                color: '#94A3B8'
-              }
+              grid: { borderDash: [4, 4], color: '#E2E8F0' },
+              ticks: { color: '#94A3B8' }
             }
           }
         }
