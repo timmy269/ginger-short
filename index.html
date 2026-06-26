@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ginger Shots | Beauty From Within</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
@@ -169,6 +170,24 @@
     .form-control:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px var(--primary-light); }
     textarea.form-control { height: 120px; resize: vertical; }
 
+    #page-dashboard .header-box { max-width: 1000px; margin: 40px auto 20px; padding: 0 24px; }
+    #page-dashboard .header-box h1 { font-size: 24px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+    #page-dashboard .header-box p { font-size: 15px; color: var(--text-light); margin-bottom: 24px; }
+    
+    #page-dashboard .dashboard-section-title { max-width: 1000px; margin: 0 auto 16px; padding: 0 24px; }
+    #page-dashboard .dashboard-section-title h2 { font-size: 18px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    #page-dashboard .dashboard-section-title p { font-size: 14px; color: var(--text-light); }
+    
+    #page-dashboard .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    #page-dashboard .stat-card { background: white; padding: 16px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: var(--transition); }
+    #page-dashboard .stat-card.active { border-color: #0284c7; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1); }
+    #page-dashboard .stat-title { color: var(--dark); font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    #page-dashboard .stat-value { color: var(--dark); font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    #page-dashboard .stat-trend { display: flex; align-items: center; gap: 6px; color: #0284c7; font-size: 14px; font-weight: 600; }
+    #page-dashboard .trend-icon { width: 18px; height: 18px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    
+    #page-dashboard .chart-container { max-width: 1000px; margin: 24px auto; background: white; padding: 24px 0; border-top: 1px solid var(--border); }
+
     .footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 0 24px; margin-top: 40px; }
     .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr 1fr; gap: 40px; margin-bottom: 40px; }
     .footer h4 { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 20px; }
@@ -197,11 +216,7 @@
     <div class="container">
       <div class="logo" onclick="showPage('home')">
         <img src="images/logo.png" alt="Logo Ginger Shots" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover;">
-        <div class="logo-text">
-          Ginger Shots
-          <!-- Dời lệnh đúp chuột vào chữ nhỏ này và đổi con trỏ chuột để dễ nhận biết -->
-          <span ondblclick="showSecretStats(); event.stopPropagation();" style="cursor: help;">Beauty Wellness</span>
-        </div>
+        <div class="logo-text">Ginger Shots<span>Beauty Wellness</span></div>
       </div>
       <ul class="nav">
         <li><a class="active" data-target="home" onclick="showPage('home')">Trang chủ</a></li>
@@ -210,6 +225,7 @@
         <li><a data-target="blog" onclick="showPage('blog')">Blog</a></li>
         <li><a data-target="news" onclick="showPage('news')">Tin tức</a></li>
         <li><a data-target="contact" onclick="showPage('contact')">Liên hệ</a></li>
+        <li><a data-target="dashboard" onclick="showPage('dashboard')">Dashboard</a></li>
       </ul>
       <button class="btn btn-primary" onclick="showPage('contact')">Đặt hàng ngay</button>
     </div>
@@ -1170,6 +1186,57 @@
     </div>
   </main>
 
+  <main class="page" id="page-dashboard">
+    <div class="header-box">
+      <h1>Phân tích hệ thống</h1>
+      <p>Tổng quan hoạt động</p>
+    </div>
+
+    <!-- Tiêu đề ngày tháng giống hình -->
+    <div class="dashboard-section-title">
+      <h2>Số liệu chính <span style="color: #94A3B8; font-weight: normal; cursor: pointer;">ⓘ</span></h2>
+      <p>27 tháng 5 - 23 tháng 6</p>
+    </div>
+
+    <!-- Lưới hiển thị 2 cột -->
+    <div class="dashboard-grid">
+      <div class="stat-card active">
+        <div class="stat-title">Lượt xem bài đăng</div>
+        <div class="stat-value" id="val-views">0</div>
+        <div class="stat-trend"><span class="trend-icon">↑</span> +7,6K</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Lượt xem hồ sơ</div>
+        <div class="stat-value" id="val-profile">0</div>
+        <div class="stat-trend"><span class="trend-icon">↑</span> +443</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Thích</div>
+        <div class="stat-value" id="val-likes">0</div>
+        <div class="stat-trend"><span class="trend-icon">↑</span> +395</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Bình luận</div>
+        <div class="stat-value" id="val-comments">0</div>
+        <div class="stat-trend"><span class="trend-icon">↑</span> +140</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Lượt chia sẻ</div>
+        <div class="stat-value" id="val-shares">0</div>
+        <div class="stat-trend"><span class="trend-icon">↑</span> +99</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Phần thưởng ước tính</div>
+        <div class="stat-value" id="val-rewards">$0.00</div>
+        <div class="stat-trend"><span class="trend-icon">↑</span> +$0.00 (+100%)</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div style="padding: 0 24px;"><canvas id="myChart"></canvas></div>
+    </div>
+  </main>
+
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -1237,20 +1304,102 @@
   </footer>
 
   <script>
-    // Chạy ngầm API đếm số mỗi khi có người vào web (khách không thấy)
-    fetch('https://api.counterapi.dev/v1/gingershots_doan2026/visits/up');
+    // Hàm chạy số liệu được nâng cấp để hỗ trợ định dạng K (hàng nghìn)
+    function animateDashboardValue(id, start, end, duration, isK) {
+      let range = end - start;
+      let current = start;
+      if (range === 0) return; // Bỏ qua nếu start = end
+      let stepTime = 30;
+      let increment = range / (duration / stepTime);
+      
+      let timer = setInterval(function() {
+        current += increment;
+        if (current >= end) {
+          current = end;
+          clearInterval(timer);
+        }
+        
+        // Nếu chọn isK, định dạng số chia 1000 và thêm "K" (vd: 7600 -> 7,6K)
+        if (isK) {
+          document.getElementById(id).innerHTML = (current / 1000).toFixed(1).replace('.', ',') + "K";
+        } else {
+          document.getElementById(id).innerHTML = Math.floor(current).toLocaleString('vi-VN');
+        }
+      }, stepTime);
+    }
 
-    // Hàm bí mật để gọi số đếm ra
-    function showSecretStats() {
-      fetch('https://api.counterapi.dev/v1/gingershots_doan2026/visits')
-        .then(response => response.json())
-        .then(data => {
-          alert("🔒 BÁO CÁO NỘI BỘ:\nTrang web hiện đã có " + data.count + " lượt truy cập thực tế!");
-        })
-        .catch(error => console.log("Lỗi tải dữ liệu"));
+    let myChartInstance = null;
+
+    function initDashboard() {
+      // 1. Reset số liệu trước khi chạy animation
+      document.getElementById("val-views").innerHTML = "0";
+      document.getElementById("val-profile").innerHTML = "0";
+      document.getElementById("val-likes").innerHTML = "0";
+      document.getElementById("val-comments").innerHTML = "0";
+      document.getElementById("val-shares").innerHTML = "0";
+      
+      // 2. Chạy animation giống các số trong hình
+      animateDashboardValue("val-views", 0, 7600, 1500, true);  
+      animateDashboardValue("val-profile", 0, 443, 1500, false);
+      animateDashboardValue("val-likes", 0, 395, 1500, false);
+      animateDashboardValue("val-comments", 0, 140, 1500, false);
+      animateDashboardValue("val-shares", 0, 99, 1500, false);
+
+      const ctx = document.getElementById('myChart').getContext('2d');
+      if (myChartInstance != null) {
+        myChartInstance.destroy();
+      }
+
+      // 3. Giả lập dữ liệu mảng có 1 đỉnh chóp (spike) để nét vẽ giống hình
+      const chartData = [150, 250, 400, 200, 350, 200, 150, 450, 200, 100, 350, 150, 300, 100, 1800, 400, 250, 350, 100];
+      const chartLabels = ["27 tháng 5", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "23 tháng 6"];
+
+      myChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            label: 'Lượt xem',
+            data: chartData,
+            borderColor: '#0284c7', // Màu viền xanh dương
+            backgroundColor: 'rgba(2, 132, 199, 0.1)', // Màu nền xanh nhạt
+            fill: true,
+            tension: 0.1, // Cạnh sắc giống biểu đồ Facebook
+            pointRadius: 0, // Ẩn các chấm tròn
+            pointHoverRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false } // Ẩn chú thích
+          },
+          scales: {
+            x: {
+              grid: { display: false }, // Ẩn đường kẻ sọc dọc
+              ticks: { maxRotation: 0, autoSkip: false, color: '#94A3B8' }
+            },
+            y: {
+              grid: { borderDash: [4, 4], color: '#E2E8F0' }, // Nét đứt ngang
+              max: 2000,
+              ticks: {
+                stepSize: 682,
+                callback: function(value) {
+                  if(value === 2000) return '2K';
+                  if(value > 1000) return (value/1000).toFixed(1).replace('.', ',') + 'K';
+                  if(value === 682) return '682'; // Hiển thị số lẻ theo chuẩn y-axis của bạn
+                  return value;
+                },
+                color: '#94A3B8'
+              }
+            }
+          }
+        }
+      });
     }
 
     function showPage(pageId) {
+      if (pageId === 'dashboard') initDashboard();
       // 1. Tự động đổi URL trên thanh địa chỉ (thêm đuôi #pageId)
       if (window.location.hash !== '#' + pageId) {
         history.pushState(null, null, '#' + pageId);
@@ -1293,10 +1442,6 @@
       const pageId = window.location.hash.replace('#', '') || 'home';
       showPage(pageId);
     });
-
-    
   </script>
-</body>
-</html>
 </body>
 </html>
