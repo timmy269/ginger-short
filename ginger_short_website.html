@@ -197,7 +197,11 @@
     <div class="container">
       <div class="logo" onclick="showPage('home')">
         <img src="images/logo.png" alt="Logo Ginger Shots" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover;">
-        <div class="logo-text">Ginger Shots<span>Beauty Wellness</span></div>
+        <div class="logo-text">
+          Ginger Shots
+          <!-- Dời lệnh đúp chuột vào chữ nhỏ này và đổi con trỏ chuột để dễ nhận biết -->
+          <span ondblclick="showSecretStats(); event.stopPropagation();" style="cursor: help;">Beauty Wellness</span>
+        </div>
       </div>
       <ul class="nav">
         <li><a class="active" data-target="home" onclick="showPage('home')">Trang chủ</a></li>
@@ -1233,6 +1237,19 @@
   </footer>
 
   <script>
+    // Chạy ngầm API đếm số mỗi khi có người vào web (khách không thấy)
+    fetch('https://api.counterapi.dev/v1/gingershots_doan2026/visits/up');
+
+    // Hàm bí mật để gọi số đếm ra
+    function showSecretStats() {
+      fetch('https://api.counterapi.dev/v1/gingershots_doan2026/visits')
+        .then(response => response.json())
+        .then(data => {
+          alert("🔒 BÁO CÁO NỘI BỘ:\nTrang web hiện đã có " + data.count + " lượt truy cập thực tế!");
+        })
+        .catch(error => console.log("Lỗi tải dữ liệu"));
+    }
+
     function showPage(pageId) {
       // 1. Tự động đổi URL trên thanh địa chỉ (thêm đuôi #pageId)
       if (window.location.hash !== '#' + pageId) {
@@ -1276,6 +1293,8 @@
       const pageId = window.location.hash.replace('#', '') || 'home';
       showPage(pageId);
     });
+
+    
   </script>
 </body>
 </html>
